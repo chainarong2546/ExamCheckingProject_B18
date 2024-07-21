@@ -1,0 +1,185 @@
+name: exam_checking
+
+services:
+
+    # ===== Service =====
+
+    frontend_service:
+        container_name: Frontend
+        build:
+            context: ./services/frontend
+            dockerfile: Dockerfile
+        # volumes:
+        #     - ./services/frontend:/app
+        networks:
+            - frontend_network
+
+    users_service:
+        container_name: Users
+        build:
+            context: ./services/users
+            dockerfile: Dockerfile
+        # volumes:
+        #     - ./services/users:/app
+        #     - users_node_modules:/app/node_modules
+        networks:
+            - users_network
+
+    database_service:
+        container_name: Database
+        build:
+            context: ./services/database
+            dockerfile: Dockerfile
+        # volumes:
+        #     - ./services/database:/app
+        #     - database_node_modules:/app/node_modules
+        networks:
+            - database_network
+            - postgresql_network
+
+    image_storage_service:
+        container_name: Image_Storage
+        build:
+            context: ./services/image_storage
+            dockerfile: Dockerfile
+        # volumes:
+        #     - ./services/image_storage:/app
+        networks:
+            - image_storage_network
+
+    # image_process_service:
+    #     container_name: Image_Process
+    #     build:
+    #         context: ./services/image_process
+    #         dockerfile: Dockerfile_dev
+    #     volumes:
+    #         - ./services/image_process:/app
+    #     networks:
+    #         - image_process_network
+
+
+    # ===== Web Server and Reverse Proxy =====
+
+    nginx:
+        container_name: Nginx
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile
+        restart: always
+        networks:
+            frontend_network:
+                aliases:
+                    - exam-checking.com
+            database_network:
+                aliases:
+                    - exam-checking.com
+            users_network:
+                aliases:
+                    - exam-checking.com
+            image_storage_network:
+                aliases:
+                    - exam-checking.com
+            image_process_network:
+                aliases:
+                    - exam-checking.com
+            ngrok_network: # For Dev
+                aliases:
+                    - exam-checking.com
+        ports:
+            - 80:80
+            - 443:443
+            - 3000:3000
+            - 3001:3001
+            - 3002:3002
+            - 3003:3003
+        depends_on:
+            - frontend_service
+            - database_service
+            - users_service
+            - image_storage_service
+            # - image_process_service
+
+
+    # ===== Database and Cache =====
+
+    redis: # port 6379
+        container_name: Redis
+        build:
+            context: ./redis
+            dockerfile: Dockerfile
+        restart: always
+        volumes:
+            - redis:/data
+        networks:
+            redis_network:
+                aliases:
+                    - redis.exam-checking.com
+
+    postgresql: # port 5432
+        container_name: Postgresql
+        build:
+            context: ./postgresql
+            dockerfile: Dockerfile
+        restart: always
+        volumes:
+            - postgresql:/var/lib/postgresql/data
+        networks:
+            postgresql_network:
+                aliases:
+                    - postgresql.exam-checking.com
+        ports:
+            - 5432:5432
+
+
+    # ===== For Dev =====
+
+    pgadmin4:
+        container_name: pgadmin4
+        image: dpage/pgadmin4:8.9
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@exam-checking.com
+            PGADMIN_DEFAULT_PASSWORD: 123456789
+        volumes:
+            - pgadmin4:/var/lib/pgadmin
+        networks:
+            - postgresql_network
+        ports:
+            - 8080:80
+
+    ngrok:
+        container_name: Ngrok
+        image: ngrok/ngrok:latest
+        command:
+            - "start"
+            - "--all"
+            - "--config"
+            - "/etc/ngrok.yml"
+        volumes:
+            - ./ngrok/ngrok.yml:/etc/ngrok.yml
+        networks:
+            - ngrok_network
+        depends_on:
+            - nginx
+
+
+volumes:
+    frontend_node_modules:
+    # frontend_next:
+    users_node_modules:
+    database_node_modules:
+    image_storage_node_modules:
+    redis:
+    postgresql:
+    pgadmin4:
+
+networks:
+    frontend_network:
+    database_network:
+    users_network:
+    image_storage_network:
+    image_process_network:
+    redis_network:
+    postgresql_network:
+
+    ngrok_network:

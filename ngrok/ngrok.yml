@@ -1,0 +1,10 @@
+version: 2
+authtoken: 2jB7zwdIs4b8og1BYdZ1cO3qtcl_31kekbJZcHhmNyZJgnxa
+tunnels:
+    frontend:
+        host_header: "exam-checking.com"
+        schemes:
+            - https
+        proto: http
+        addr: https://nginx:443
+        domain: feasible-panther-precisely.ngrok-free.app

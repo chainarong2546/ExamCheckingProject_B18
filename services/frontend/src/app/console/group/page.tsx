@@ -1,0 +1,190 @@
+"use client";
+import React from "react";
+import { useRouter } from "next/navigation";
+import {
+    Box,
+    Divider,
+    Grid,
+    IconButton,
+    InputBase,
+    Paper,
+    ToggleButton,
+    ToggleButtonGroup,
+    Typography,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
+
+type Props = {};
+
+export default function ConsoleGroupPage({}: Props) {
+    const router = useRouter();
+
+    return (
+        <>
+            <Grid
+                container
+                direction="column"
+                wrap="nowrap"
+                sx={{ height: "100%" }}
+            >
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        flexWrap: "wrap",
+                        gap: 1,
+                        p: 2,
+                    }}
+                >
+                    <Typography variant="h6">My Group</Typography>
+                    <Paper sx={{ borderRadius: 5 }}>
+                        <InputBase
+                            sx={{ ml: 2 }}
+                            placeholder="Search Group Name"
+                        />
+                        <IconButton
+                            type="button"
+                            sx={{ p: "10px" }}
+                            aria-label="search"
+                        >
+                            <SearchIcon />
+                        </IconButton>
+                    </Paper>
+                </Box>
+                <Divider sx={{ m: 2 }} />
+                <Box
+                    sx={{
+                        p: 2,
+                        overflow: "auto",
+                    }}
+                >
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} >
+                            <Paper
+                                elevation={4}
+                                sx={{
+                                    p: 1,
+                                    borderRadius: 3,
+                                    cursor: "pointer",
+                                    transition: "box-shadow 0.3s",
+                                    "&:hover": {
+                                        boxShadow:
+                                            "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
+                                    },
+                                }}
+                                onClick={() => router.push("/console/group/1")}
+                            >
+                                <Typography sx={{mx:1}}>ชื่อกลุ่ม การตรวจ 1</Typography>
+                                <Paper variant="outlined" sx={{p: 1, m:1}}>
+                                    <Typography><b>วิชา:</b> การเขียนโปรแกรมคอมพิวเตอร์</Typography>
+                                    <Typography><b>ปีการศึกษา:</b> 2566</Typography>
+                                    <Typography><b>จำนวนรูป:</b> 25</Typography>
+                                </Paper>
+                                <Typography variant="body2" color="text.secondary" align="right" sx={{mx:1}}>สร้างเมื่อ 1/2/2566</Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} >
+                            <Paper
+                                elevation={4}
+                                sx={{
+                                    p: 1,
+                                    borderRadius: 3,
+                                    cursor: "pointer",
+                                    transition: "box-shadow 0.3s",
+                                    "&:hover": {
+                                        boxShadow:
+                                            "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
+                                    },
+                                }}
+                                onClick={() => router.push("/console/group/2")}
+                            >
+                                <Typography sx={{mx:1}}>ชื่อกลุ่ม การตรวจ 2</Typography>
+                                <Paper variant="outlined" sx={{p: 1, m:1}}>
+                                    <Typography><b>วิชา:</b> การเขียนโปรแกรมคอมพิวเตอร์</Typography>
+                                    <Typography><b>ปีการศึกษา:</b> 2566</Typography>
+                                    <Typography><b>จำนวนรูป:</b> 25</Typography>
+                                </Paper>
+                                <Typography variant="body2" color="text.secondary" align="right" sx={{mx:1}}>สร้างเมื่อ 1/2/2566</Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} >
+                            <Paper
+                                elevation={4}
+                                sx={{
+                                    p: 1,
+                                    borderRadius: 3,
+                                    cursor: "pointer",
+                                    transition: "box-shadow 0.3s",
+                                    "&:hover": {
+                                        boxShadow:
+                                            "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
+                                    },
+                                }}
+                                onClick={() => router.push("/console/group/3")}
+                            >
+                                <Typography sx={{mx:1}}>ชื่อกลุ่ม การตรวจ 3</Typography>
+                                <Paper variant="outlined" sx={{p: 1, m:1}}>
+                                    <Typography><b>วิชา:</b> การเขียนโปรแกรมคอมพิวเตอร์</Typography>
+                                    <Typography><b>ปีการศึกษา:</b> 2566</Typography>
+                                    <Typography><b>จำนวนรูป:</b> 25</Typography>
+                                </Paper>
+                                <Typography variant="body2" color="text.secondary" align="right" sx={{mx:1}}>สร้างเมื่อ 1/2/2566</Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} >
+                            <Paper
+                                elevation={4}
+                                sx={{
+                                    p: 1,
+                                    borderRadius: 3,
+                                    cursor: "pointer",
+                                    transition: "box-shadow 0.3s",
+                                    "&:hover": {
+                                        boxShadow:
+                                            "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
+                                    },
+                                }}
+                                onClick={() => router.push("/console/group/4")}
+                            >
+                                <Typography sx={{mx:1}}>ชื่อกลุ่ม การตรวจ 4</Typography>
+                                <Paper variant="outlined" sx={{p: 1, m:1}}>
+                                    <Typography><b>วิชา:</b> การเขียนโปรแกรมคอมพิวเตอร์</Typography>
+                                    <Typography><b>ปีการศึกษา:</b> 2566</Typography>
+                                    <Typography><b>จำนวนรูป:</b> 25</Typography>
+                                </Paper>
+                                <Typography variant="body2" color="text.secondary" align="right" sx={{mx:1}}>สร้างเมื่อ 1/2/2566</Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={4} lg={3} xl={2} >
+                            <Paper
+                                elevation={4}
+                                sx={{
+                                    p: 1,
+                                    borderRadius: 3,
+                                    cursor: "pointer",
+                                    transition: "box-shadow 0.3s",
+                                    "&:hover": {
+                                        boxShadow:
+                                            "0px 0px 10px 0px rgba(0, 0, 0, 0.5)",
+                                    },
+                                }}
+                                onClick={() => router.push("/console/group/5")}
+                            >
+                                <Typography sx={{mx:1}}>ชื่อกลุ่ม การตรวจ 5</Typography>
+                                <Paper variant="outlined" sx={{p: 1, m:1}}>
+                                    <Typography><b>วิชา:</b> การเขียนโปรแกรมคอมพิวเตอร์</Typography>
+                                    <Typography><b>ปีการศึกษา:</b> 2566</Typography>
+                                    <Typography><b>จำนวนรูป:</b> 25</Typography>
+                                </Paper>
+                                <Typography variant="body2" color="text.secondary" align="right" sx={{mx:1}}>สร้างเมื่อ 1/2/2566</Typography>
+                            </Paper>
+                        </Grid>
+                        
+                    </Grid>
+                </Box>
+            </Grid>
+        </>
+    );
+}

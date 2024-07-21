@@ -1,0 +1,192 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+model Answer {
+  ID                                         Int             @id(map: "Answer_primary") @default(autoincrement())
+  Name                                       String          @db.VarChar(255)
+  Owner                                      String          @db.Uuid
+  Subject                                    String          @db.VarChar(255)
+  Year                                       String          @db.VarChar(10)
+  TotalNo                                    Int             @db.SmallInt
+  Answer                                     Json[]
+  Archive                                    Boolean?        @default(false)
+  CreateAt                                   DateTime?       @default(now()) @db.Timestamptz(6)
+  UpdateAt                                   DateTime?       @default(now()) @db.Timestamptz(6)
+  User                                       User            @relation(fields: [Owner], references: [ID], onUpdate: Restrict, map: "Answer_Owner_foreign_User_ID")
+  AnswerEditLog_AnswerEditLog_AnswerToAnswer AnswerEditLog[] @relation("AnswerEditLog_AnswerToAnswer")
+  Group_Group_AnswerToAnswer                 Group[]         @relation("Group_AnswerToAnswer")
+  ShareAnswer                                ShareAnswer?
+  SheetPredict_SheetPredict_AnswerToAnswer   SheetPredict[]  @relation("SheetPredict_AnswerToAnswer")
+}
+
+model AnswerEditLog {
+  LogID                               BigInt    @id(map: "AnswerEditLog_primary") @default(autoincrement())
+  By                                  String    @db.Uuid
+  Answer                              Int
+  Detail                              Json
+  EditAt                              DateTime? @default(now()) @db.Timestamptz(6)
+  Answer_AnswerEditLog_AnswerToAnswer Answer    @relation("AnswerEditLog_AnswerToAnswer", fields: [Answer], references: [ID], onUpdate: Restrict, map: "AnswerEditLog_Answer_foreign_Answer_ID")
+  User                                User      @relation(fields: [By], references: [ID], onUpdate: Restrict, map: "AnswerEditLog_By_foreign_User_ID")
+}
+
+model Group {
+  ID                                     Int            @id(map: "Group_primary") @default(autoincrement())
+  Name                                   String         @db.VarChar(255)
+  Subject                                String         @db.VarChar(255)
+  Year                                   String         @db.VarChar(10)
+  Owner                                  String         @db.Uuid
+  Template                               Int            @db.SmallInt
+  Answer                                 Int            @db.SmallInt
+  Archive                                Boolean?       @default(false)
+  CreateAt                               DateTime?      @default(now()) @db.Timestamptz(6)
+  UpdateAt                               DateTime?      @default(now()) @db.Timestamptz(6)
+  Answer_Group_AnswerToAnswer            Answer         @relation("Group_AnswerToAnswer", fields: [Answer], references: [ID], onUpdate: Restrict, map: "Group_Answer_foreign_Answer_ID")
+  User                                   User           @relation(fields: [Owner], references: [ID], onUpdate: Restrict, map: "Group_Owner_foreign_User_ID")
+  Template_Group_TemplateToTemplate      Template       @relation("Group_TemplateToTemplate", fields: [Template], references: [ID], onUpdate: Restrict, map: "Group_Template_foreign_Template_ID")
+  GroupEditLog_GroupEditLog_GroupToGroup GroupEditLog[] @relation("GroupEditLog_GroupToGroup")
+  Sheet_Sheet_GroupToGroup               Sheet[]        @relation("Sheet_GroupToGroup")
+}
+
+model GroupEditLog {
+  LogID                           BigInt    @id(map: "GroupEditLog_primary") @default(autoincrement())
+  By                              String    @db.Uuid
+  Group                           Int
+  Detail                          Json
+  EditAt                          DateTime? @default(now()) @db.Timestamptz(6)
+  User                            User      @relation(fields: [By], references: [ID], onUpdate: Restrict, map: "GroupEditLog_By_foreign_User_ID")
+  Group_GroupEditLog_GroupToGroup Group     @relation("GroupEditLog_GroupToGroup", fields: [Group], references: [ID], onUpdate: Restrict, map: "GroupEditLog_Group_foreign_Group_ID")
+}
+
+model LoginLog {
+  LogID     BigInt    @id(map: "LoginLog_primary") @default(autoincrement())
+  IPAddress String    @db.VarChar(100)
+  Username  String    @db.VarChar(100)
+  Success   Boolean
+  UUID      String?   @db.Uuid
+  LoginAt   DateTime? @default(now()) @db.Timestamptz(6)
+  User      User?     @relation(fields: [UUID], references: [ID], onDelete: Restrict, onUpdate: Restrict, map: "LoginLog_UUID_foreign_User_ID")
+}
+
+model Role {
+  ID                   Int       @id(map: "Role_primary") @default(autoincrement()) @db.SmallInt
+  Name                 String    @unique(map: "Role_Name_unique") @db.VarChar(100)
+  Detail               String?
+  CreateAt             DateTime? @default(now()) @db.Timestamptz(6)
+  UpdateAt             DateTime? @default(now()) @db.Timestamptz(6)
+  User_User_RoleToRole User[]    @relation("User_RoleToRole")
+}
+
+model ShareAnswer {
+  ID       Int       @id(map: "ShareAnswer_primary")
+  Code     String    @unique(map: "ShareAnswer_Code_unique") @db.VarChar(20)
+  CreateAt DateTime? @default(now()) @db.Timestamptz(6)
+  Answer   Answer    @relation(fields: [ID], references: [ID], onUpdate: Restrict, map: "ShareAnswer_ID_foreign_Answer_ID")
+}
+
+model Sheet {
+  ID                                     Int            @id(map: "Sheet_primary") @default(autoincrement())
+  Name                                   String         @unique(map: "Sheet_Name_unique") @db.VarChar(100)
+  Group                                  Int
+  Deleted                                Boolean?       @default(false)
+  CreateAt                               DateTime?      @default(now()) @db.Timestamptz(6)
+  Group_Sheet_GroupToGroup               Group          @relation("Sheet_GroupToGroup", fields: [Group], references: [ID], onUpdate: Restrict, map: "Sheet_Group_foreign_Group_ID")
+  SheetPredict_SheetPredict_SheetToSheet SheetPredict[] @relation("SheetPredict_SheetToSheet")
+}
+
+model SheetPredict {
+  ID                                                                 Int                   @id(map: "SheetPredict_primary") @default(autoincrement())
+  Sheet                                                              Int
+  Template                                                           Int                   @db.SmallInt
+  Answer                                                             Int
+  Result                                                             Json[]
+  ResultProbability                                                  Json[]
+  StdIDResult                                                        Json[]
+  StdIDResultProbability                                             Json[]
+  UnUse                                                              Boolean?              @default(false)
+  PredictAt                                                          DateTime?             @default(now()) @db.Timestamptz(6)
+  Answer_SheetPredict_AnswerToAnswer                                 Answer                @relation("SheetPredict_AnswerToAnswer", fields: [Answer], references: [ID], onUpdate: Restrict, map: "SheetPredict_Answer_foreign_Answer_ID")
+  Sheet_SheetPredict_SheetToSheet                                    Sheet                 @relation("SheetPredict_SheetToSheet", fields: [Sheet], references: [ID], onUpdate: Restrict, map: "SheetPredict_Sheet_foreign_Sheet_ID")
+  Template_SheetPredict_TemplateToTemplate                           Template              @relation("SheetPredict_TemplateToTemplate", fields: [Template], references: [ID], onUpdate: Restrict, map: "SheetPredict_Template_foreign_Template_ID")
+  SheetPredictEditLog_SheetPredictEditLog_SheetPredictToSheetPredict SheetPredictEditLog[] @relation("SheetPredictEditLog_SheetPredictToSheetPredict")
+}
+
+model SheetPredictEditLog {
+  LogID                                                       BigInt       @id(map: "SheetPredictEditLog_primary") @default(autoincrement())
+  By                                                          String       @db.Uuid
+  SheetPredict                                                Int
+  Detail                                                      Json
+  EditAt                                                      DateTime?    @default(now()) @db.Timestamptz(6)
+  User                                                        User         @relation(fields: [By], references: [ID], onUpdate: Restrict, map: "SheetPredictEditLog_By_foreign_User_ID")
+  SheetPredict_SheetPredictEditLog_SheetPredictToSheetPredict SheetPredict @relation("SheetPredictEditLog_SheetPredictToSheetPredict", fields: [SheetPredict], references: [ID], onUpdate: Restrict, map: "SheetPredictEditLog_Sheet_foreign_Sheet_ID")
+}
+
+model Template {
+  ID                                                 Int               @id(map: "Template_primary") @default(autoincrement()) @db.SmallInt
+  Name                                               String            @db.VarChar(255)
+  TotalNo                                            Int               @db.SmallInt
+  MarkSymbol_TL                                      Json
+  MarkSymbol_TC                                      Json
+  MarkSymbol_TR                                      Json
+  MarkSymbol_BL                                      Json
+  MarkSymbol_BR                                      Json
+  SquareStdID                                        Json[]
+  SquareAnswer                                       Json[]
+  Archive                                            Boolean?          @default(false)
+  CreateAt                                           DateTime?         @default(now()) @db.Timestamptz(6)
+  UpdateAt                                           DateTime?         @default(now()) @db.Timestamptz(6)
+  Group_Group_TemplateToTemplate                     Group[]           @relation("Group_TemplateToTemplate")
+  SheetPredict_SheetPredict_TemplateToTemplate       SheetPredict[]    @relation("SheetPredict_TemplateToTemplate")
+  TemplateEditLog_TemplateEditLog_TemplateToTemplate TemplateEditLog[] @relation("TemplateEditLog_TemplateToTemplate")
+}
+
+model TemplateEditLog {
+  LogID                                       BigInt    @id(map: "TemplateEditLog_primary") @default(autoincrement())
+  By                                          String    @db.Uuid
+  Template                                    Int       @db.SmallInt
+  Detail                                      Json
+  EditAt                                      DateTime? @default(now()) @db.Timestamptz(6)
+  User                                        User      @relation(fields: [By], references: [ID], onUpdate: Restrict, map: "TemplateEditLog_By_foreign_User_ID")
+  Template_TemplateEditLog_TemplateToTemplate Template  @relation("TemplateEditLog_TemplateToTemplate", fields: [Template], references: [ID], onUpdate: Restrict, map: "TemplateEditLog_Template_foreign_Template_ID")
+}
+
+model User {
+  ID                                 String                @id(map: "User_primary") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  Username                           String                @unique(map: "User_Username_unique") @db.VarChar(100)
+  Password                           String                @db.VarChar(255)
+  FirstName                          String                @db.VarChar(100)
+  LastName                           String                @db.VarChar(100)
+  Role                               Int                   @db.SmallInt
+  Email                              String                @unique(map: "User_Email_unique") @db.VarChar(255)
+  Deleted                            Boolean?              @default(false)
+  RequireChangePassword              Boolean?              @default(true)
+  CreateAt                           DateTime?             @default(now()) @db.Timestamptz(6)
+  UpdateAt                           DateTime?             @default(now()) @db.Timestamptz(6)
+  Answer                             Answer[]
+  AnswerEditLog                      AnswerEditLog[]
+  Group                              Group[]
+  GroupEditLog                       GroupEditLog[]
+  LoginLog                           LoginLog[]
+  SheetPredictEditLog                SheetPredictEditLog[]
+  TemplateEditLog                    TemplateEditLog[]
+  Role_User_RoleToRole               Role                  @relation("User_RoleToRole", fields: [Role], references: [ID], onUpdate: Restrict, map: "User_Role_foreign_Role_ID")
+  UserEditLog_UserEditLog_ByToUser   UserEditLog[]         @relation("UserEditLog_ByToUser")
+  UserEditLog_UserEditLog_UserToUser UserEditLog[]         @relation("UserEditLog_UserToUser")
+}
+
+model UserEditLog {
+  LogID                       BigInt    @id(map: "UserEditLog_primary") @default(autoincrement())
+  By                          String    @db.Uuid
+  User                        String    @db.Uuid
+  Detail                      Json
+  EditAt                      DateTime? @default(now()) @db.Timestamptz(6)
+  User_UserEditLog_ByToUser   User      @relation("UserEditLog_ByToUser", fields: [By], references: [ID], onUpdate: Restrict, map: "UserEditLog_By_foreign_User_ID")
+  User_UserEditLog_UserToUser User      @relation("UserEditLog_UserToUser", fields: [User], references: [ID], onUpdate: Restrict, map: "UserEditLog_User_foreign_User_ID")
+}

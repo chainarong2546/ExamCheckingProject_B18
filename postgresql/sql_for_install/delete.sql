@@ -1,0 +1,46 @@
+-- Disable foreign key checks
+ALTER TABLE public."User" DISABLE TRIGGER ALL;
+ALTER TABLE public."Answer" DISABLE TRIGGER ALL;
+ALTER TABLE public."ShareAnswer" DISABLE TRIGGER ALL;
+ALTER TABLE public."Group" DISABLE TRIGGER ALL;
+ALTER TABLE public."Sheet" DISABLE TRIGGER ALL;
+ALTER TABLE public."SheetPredict" DISABLE TRIGGER ALL;
+ALTER TABLE public."AnswerEditLog" DISABLE TRIGGER ALL;
+ALTER TABLE public."TemplateEditLog" DISABLE TRIGGER ALL;
+ALTER TABLE public."GroupEditLog" DISABLE TRIGGER ALL;
+ALTER TABLE public."SheetPredictEditLog" DISABLE TRIGGER ALL;
+ALTER TABLE public."UserEditLog" DISABLE TRIGGER ALL;
+ALTER TABLE public."LoginLog" DISABLE TRIGGER ALL;
+
+-- Drop tables
+DROP TABLE IF EXISTS public."Role" CASCADE;
+DROP TABLE IF EXISTS public."User" CASCADE;
+DROP TABLE IF EXISTS public."Template" CASCADE;
+DROP TABLE IF EXISTS public."Answer" CASCADE;
+DROP TABLE IF EXISTS public."ShareAnswer" CASCADE;
+DROP TABLE IF EXISTS public."Group" CASCADE;
+DROP TABLE IF EXISTS public."Sheet" CASCADE;
+DROP TABLE IF EXISTS public."SheetPredict" CASCADE;
+DROP TABLE IF EXISTS public."AnswerEditLog" CASCADE;
+DROP TABLE IF EXISTS public."TemplateEditLog" CASCADE;
+DROP TABLE IF EXISTS public."GroupEditLog" CASCADE;
+DROP TABLE IF EXISTS public."SheetPredictEditLog" CASCADE;
+DROP TABLE IF EXISTS public."UserEditLog" CASCADE;
+DROP TABLE IF EXISTS public."LoginLog" CASCADE;
+
+-- Drop sequences
+DROP SEQUENCE IF EXISTS public."Role_ID_serial" CASCADE;
+DROP SEQUENCE IF EXISTS public."Template_ID_serial" CASCADE;
+DROP SEQUENCE IF EXISTS public."Answer_ID_serial" CASCADE;
+DROP SEQUENCE IF EXISTS public."ShareAnswer_ID_serial" CASCADE;
+DROP SEQUENCE IF EXISTS public."Group_ID_serial" CASCADE;
+DROP SEQUENCE IF EXISTS public."Sheet_ID_serial" CASCADE;
+DROP SEQUENCE IF EXISTS public."AnswerEditLog_LogID_serial" CASCADE;
+DROP SEQUENCE IF EXISTS public."TemplateEditLog_LogID_serial" CASCADE;
+DROP SEQUENCE IF EXISTS public."GroupEditLog_LogID_serial" CASCADE;
+DROP SEQUENCE IF EXISTS public."SheetEditLog_LogID_serial" CASCADE;
+DROP SEQUENCE IF EXISTS public."UserEditLog_LogID_serial" CASCADE;
+DROP SEQUENCE IF EXISTS public."LoginLog_LogID_serial" CASCADE;
+
+-- Drop function
+DROP FUNCTION IF EXISTS public."AutoUpdate_UpdateAt" CASCADE;

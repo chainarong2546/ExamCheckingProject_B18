@@ -1,0 +1,27 @@
+FROM node:20.14.0-alpine3.20 AS base
+
+WORKDIR /app
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
+
+COPY . .
+
+EXPOSE 3000
+
+ENV PORT 3000
+ENV NODE_ENV=development
+ENV CHOKIDAR_USEPOLLING 1
+ENV WATCHPACK_POLLING 1
+ENV NEXT_TELEMETRY_DISABLED 1
+
+CMD \
+  if [ -f yarn.lock ]; then yarn dev; \
+  elif [ -f package-lock.json ]; then npm run dev; \
+  elif [ -f pnpm-lock.yaml ]; then pnpm dev; \
+  else npm run dev; \
+  fi
