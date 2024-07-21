@@ -14,16 +14,16 @@
 
 ### การแบ่งระบบออกเป็นบริการย่อยๆ
 
-| Service Name          | Host Port | Container Port | Folder                | Description                                         |
-| --------------------- | --------: | :------------- | --------------------- | --------------------------------------------------- |
-| frontend-service      |         - | 3000           | service/frontend      | Frontend service run with `Next.JS`                 |
-| user-service          |         - | 3000           | service/user          | User service run with `Express.JS`                  |
-| image-storage-service |         - | 3000           | service/image-storage | Image Storage service run with `Express.JS`         |
-| image-process-service |         - | 8000           | service/image-process | Image Process service run with `Python` + `FastAPI` |
-| database-service      |         - | 3000           | service/database      | Database service run with `Express.JS`              |
-| nginx                 |    80 443 | 80 443         | nginx                 | Load balance and Proxies run with `Nginx`           |
-| postgressql           |      5432 | 5432           | postgressql           | Database run with `Postgresql`                      |
-| redis                 |      6379 | 6379           | redis                 |                                                     |
+| Service Name          | Host Port | Container Port                         | Folder                | Description                                         |
+| --------------------- | --------: | :------------------------------------- | --------------------- | --------------------------------------------------- |
+| frontend-service      |         - | 3000                                   | service/frontend      | Frontend service run with `Next.JS`                 |
+| user-service          |         - | 3000                                   | service/user          | User service run with `Express.JS`                  |
+| database-service      |         - | 3000                                   | service/database      | Database service run with `Express.JS`              |
+| image-storage-service |         - | 3000                                   | service/image-storage | Image Storage service run with `Express.JS`         |
+| image-process-service |         - | 8000                                   | service/image-process | Image Process service run with `Python` + `FastAPI` |
+| nginx                 |    80 443<br>-<br>-<br>-<br>-<br> | 80 443<br>3000<br>3001<br>3002<br>3003 | nginx                 | Load balance and Proxies run with `Nginx`           |
+| postgressql           |      5432 | 5432                                   | postgressql           | Database run with `Postgresql`                      |
+| redis                 |      6379 | 6379                                   | redis                 |                                                     |
 
 ### เอกสารประกอบอื่นๆ
 
@@ -37,7 +37,7 @@
 
 เปลี่ยน `dockerfile` ในไฟล์ compose.yaml เป็น `Dockerfile`
 
-``` CLI
+```CLI
 docker compose up --build
 ```
 
@@ -45,7 +45,7 @@ docker compose up --build
 
 เปลี่ยน `dockerfile` ในไฟล์ compose.yaml เป็น `Dockerfile_Dev`
 
-``` CLI
+```CLI
 docker compose up --build
 ```
 
