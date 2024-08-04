@@ -1,8 +1,17 @@
 {
     "cSpell.words": [
         "Chainarong",
+        "colorspace",
+        "enctype",
+        "fastapi",
         "Kongpol",
+        "LEAKPROOF",
         "nextval",
-        "panva"
+        "panva",
+        "plpgsql",
+        "pydantic",
+        "pymupdf",
+        "xres",
+        "yres"
     ]
 }
