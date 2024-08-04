@@ -11,8 +11,8 @@ import PIL.Image
 import filetype
 
 # your local module
-import config
-import model
+import services.image_process.src.config.config as config
+import services.image_process.src.libs.model as model
 
 
 

@@ -18,4 +18,4 @@ RUN python -m pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["fastapi", "run", "server.py"]
+CMD ["uvicorn", "src.server:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]

@@ -54,7 +54,7 @@ services:
         container_name: Image_Process
         build:
             context: ./services/image_process
-            dockerfile: Dockerfile_dev
+            dockerfile: Dockerfile_Dev
         volumes:
             - ./services/image_process:/app
         networks:

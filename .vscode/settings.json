@@ -11,6 +11,7 @@
         "plpgsql",
         "pydantic",
         "pymupdf",
+        "uvicorn",
         "xres",
         "yres"
     ]
