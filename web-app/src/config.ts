@@ -1,0 +1,12 @@
+
+// export const NEXT_PUBLIC_IMAGE_STORAGE_API_URL = process.env.NEXT_PUBLIC_IMAGE_STORAGE_API_URL;
+
+// export const NEXT_PUBLIC_IMAGE_PROCESS_API_URL = process.env.NEXT_PUBLIC_IMAGE_PROCESS_API_URL;
+
+// export const NEXT_PUBLIC_DATABASE_API_URL = process.env.NEXT_PUBLIC_DATABASE_API_URL;
+
+export const SECRET_KEY =
+    process.env.SECRET_KEY ||
+    "75b251648dc31c92308145eda8f15c71849dc0b42391f1ae4d22295bc4fd6a38f955923d4b88b66af7b2a89cc68f34aec25ea587de70ea8da783cd2f89b4553c";
+
+export const SERVICE_ID = process.env.SERVICE_ID || "001";
