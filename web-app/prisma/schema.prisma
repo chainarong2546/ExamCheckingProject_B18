@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+model answers {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(255)
+  owner_id   Int
+  subject    String   @db.VarChar(255)
+  year       Int
+  term       Int
+  total_no   Int
+  answer     Json
+  archive    Boolean  @default(false)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @default(now()) @db.Timestamp(6)
+  users      users    @relation(fields: [owner_id], references: [id], onUpdate: Restrict)
+  groups     groups[]
+  sheets     sheets[]
+}
+
+model groups {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  subject     String    @db.VarChar(255)
+  year        Int
+  term        Int
+  owner_id    Int
+  template_id Int
+  answer_id   Int
+  un_use      Boolean   @default(false)
+  created_at  DateTime  @default(now()) @db.Timestamp(6)
+  updated_at  DateTime  @default(now()) @db.Timestamp(6)
+  answers     answers   @relation(fields: [answer_id], references: [id], onUpdate: Restrict)
+  users       users     @relation(fields: [owner_id], references: [id], onUpdate: Restrict)
+  templates   templates @relation(fields: [template_id], references: [id], onUpdate: Restrict)
+  sheets      sheets[]
+}
+
+model roles {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique @db.VarChar(100)
+  detail String  @db.VarChar(255)
+  users  users[]
+}
+
+model sheets {
+  id                 Int        @id @default(autoincrement())
+  name               String     @unique @db.VarChar(100)
+  group_id           Int
+  deleted            Boolean    @default(false)
+  template_id        Int?
+  answer_id          Int?
+  predict_ans_detail Json?
+  predict_ans_result Json?
+  predict_std_result Json?
+  predict_std_detail Json?
+  total_score        Int?
+  status             String     @default("IDLE") @db.VarChar(10)
+  process_id         String?    @db.VarChar(100)
+  created_at         DateTime   @default(now()) @db.Timestamp(6)
+  updated_at         DateTime   @default(now()) @db.Timestamp(6)
+  answers            answers?   @relation(fields: [answer_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  groups             groups     @relation(fields: [group_id], references: [id], onUpdate: Restrict)
+  templates          templates? @relation(fields: [template_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+}
+
+model templates {
+  id               Int      @id @default(autoincrement())
+  name             String   @db.VarChar(255)
+  total_no         Int
+  image_url        String   @db.VarChar(255)
+  pdf_url          String   @db.VarChar(255)
+  marker_qr        Json
+  marker_qr_data   String   @db.VarChar(255)
+  marker_tl        Json
+  marker_tr        Json
+  marker_bl        Json
+  marker_br        Json
+  marker_tl_center Json
+  marker_tr_center Json
+  marker_bl_center Json
+  marker_br_center Json
+  square_std_id    Json
+  square_answer    Json
+  un_use           Boolean  @default(false)
+  created_at       DateTime @default(now()) @db.Timestamp(6)
+  updated_at       DateTime @default(now()) @db.Timestamp(6)
+  groups           groups[]
+  sheets           sheets[]
+}
+
+model users {
+  id         Int       @id @default(autoincrement())
+  username   String    @unique @db.VarChar(25)
+  password   String    @db.VarChar(60)
+  first_name String    @db.VarChar(50)
+  last_name  String    @db.VarChar(50)
+  email      String    @unique @db.VarChar(255)
+  role_id    Int
+  deleted    Boolean   @default(false)
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime  @default(now()) @db.Timestamp(6)
+  answers    answers[]
+  groups     groups[]
+  roles      roles     @relation(fields: [role_id], references: [id], onUpdate: Restrict)
+}
