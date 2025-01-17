@@ -9,7 +9,7 @@ const corsOptionsDelegate: CorsOptionsDelegate = (req, callback) => {
     if (origin && allowedOrigins.includes(origin)) {
         callback(null, { origin: true, credentials: true }); // Allow the request
     } else {
-        callback(null, { origin: false }); // Block the request
+        callback(null, { origin: true }); // Block the request
     }
 };
 
